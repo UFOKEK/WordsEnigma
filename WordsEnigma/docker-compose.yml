@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:14.1-alpine
+    ports:
+      - '5432:5432'
+    volumes:
+      - ~/apps/mongo:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    restart: always
+  web:
+    build:
+      context: .
+      dockerfile: ./web/Dockerfile
+    ports:
+      - "8910:8910"
+    volumes:
+      - ~/apps/web:/app
+    environment:
+      - DATABASE_URL=postgresql://other@localhost/otherdb?connect_timeout=10&application_name=myapp
+      - PRISMA_HIDE_UPDATE_MESSAGE=true
+      - SESSION_SECRET=pd8RNxZJ9foEvWTAjJo5V34YrHQidsTb3HDZ62zbiJpQ8J6vV2rVWyCnYgBY3ouj
+    depends_on:
+      - db
+    restart: always
+  api:
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+    ports:
+      - "8911:8911"
+    depends_on:
+      - db
+      - web
+    volumes:
+      - ~/apps/api:/app
+    restart: always
+
+

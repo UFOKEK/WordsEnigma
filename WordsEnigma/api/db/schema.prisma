@@ -1,0 +1,133 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                  String      @id @default(cuid())
+  email               String      @unique
+  username            String      @unique
+  name                String?
+  hashedPassword      String
+  salt                String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  roles               String      @default("user")
+  userSetting         UserSetting @relation(fields: [userSettingId], references: [id])
+  userSettingId       String
+  Game                Game[]
+  Statistics          Statistic[]
+  lastLogin           DateTime?
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+model UserSetting {
+  id         String   @id @default(cuid())
+  bio        String?
+  theme      String?
+  Language   Language @relation(fields: [languageId], references: [id])
+  User       User[]
+  languageId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+}
+
+model Language {
+  id           String        @id @default(cuid())
+  name         String
+  code         String        @unique
+  UserSettings UserSetting[]
+  Word         Word[]
+  WordBank     WordBank[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Word {
+  id         String    @id @default(cuid())
+  word       String    @unique
+  definition String?
+  example    String?
+  synonym    String?
+  size       Int
+  source     String[]
+  Language   Language  @relation(fields: [languageId], references: [id])
+  languageId String
+  Game       Game[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  WordBank   WordBank? @relation(fields: [wordBankId], references: [id])
+  wordBankId String?
+}
+
+model WordBank {
+  id         String   @id @default(cuid())
+  name       String   @unique
+  Language   Language @relation(fields: [languageId], references: [id])
+  languageId String
+  Word       Word[]
+  Game       Game[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Game {
+  id           String     @id @default(cuid())
+  name         String
+  tries        Int        @default(0)
+  startedAt    DateTime
+  finishedAt   DateTime?
+  correct      Boolean
+  duration     Int
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String
+  word         Word       @relation(fields: [wordId], references: [id])
+  wordId       String
+  wordsBank    WordBank   @relation(fields: [wordsBankId], references: [id])
+  wordsBankId  String
+  tryRows      TryRow[]
+  statistics   Statistic? @relation(fields: [statisticsId], references: [id])
+  statisticsId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Letter {
+  id         String   @id @default(cuid())
+  letter     String
+  tryRow     TryRow   @relation(fields: [tryRowId], references: [id])
+  tryRowId   String
+  createdAt  DateTime
+  modifiedAt DateTime
+}
+
+model TryRow {
+  id        String   @id @default(cuid())
+  game      Game     @relation(fields: [gameId], references: [id])
+  gameId    String
+  tries     Int      @default(0)
+  rowSize   Int      @default(0)
+  correct   Boolean
+  letters   Letter[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Statistic {
+  id         String   @id @default(cuid())
+  gamePlayed Int      @default(0)
+  gameWon    Int      @default(0)
+  gameLost   Int      @default(0)
+  streak     Int      @default(0)
+  average    Int      @default(0)
+  user       User     @relation(fields: [id], references: [id])
+  Game       Game[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
