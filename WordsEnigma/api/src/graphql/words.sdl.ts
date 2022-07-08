@@ -6,7 +6,7 @@ export const schema = gql`
     example: String
     synonym: String
     size: Int!
-    source: [String]!
+    source: String!
     Language: Language!
     languageId: String!
     Game: [Game]!
@@ -18,7 +18,9 @@ export const schema = gql`
 
   type Query {
     words: [Word!]! @requireAuth
-    word(id: String!): Word @requireAuth
+    word(id: String!): Word! @skipAuth
+    findWord(word: String!): Word! @skipAuth
+    findWordByWordBankId(id: String!): [Word!]! @skipAuth
   }
 
   input CreateWordInput {
@@ -27,7 +29,7 @@ export const schema = gql`
     example: String
     synonym: String
     size: Int!
-    source: [String]!
+    source: String!
     languageId: String!
     wordBankId: String
   }
@@ -38,7 +40,7 @@ export const schema = gql`
     example: String
     synonym: String
     size: Int
-    source: [String]!
+    source: String!
     languageId: String
     wordBankId: String
   }

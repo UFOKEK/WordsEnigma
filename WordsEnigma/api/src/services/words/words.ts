@@ -15,6 +15,24 @@ export const word: QueryResolvers['word'] = ({ id }) => {
   })
 }
 
+export const findWord: QueryResolvers['findWord'] = ({ word }) => {
+  return db.word.findUnique({
+    where: { 
+      word: word
+     },
+  })
+}
+
+export const findWordByWordBankId: QueryResolvers['findWordByWordBankId'] = ({ id }) => {
+  return db.word.findMany({
+    where: { 
+      wordBankId :id 
+    },
+  })
+
+}
+
+
 export const createWord: MutationResolvers['createWord'] = ({ input }) => {
   return db.word.create({
     data: input,

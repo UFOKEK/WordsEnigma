@@ -12,7 +12,8 @@ export const schema = gql`
 
   type Query {
     wordBanks: [WordBank!]! @requireAuth
-    wordBank(id: String!): WordBank @requireAuth
+    wordBank(id: String!): WordBank! @skipAuth
+    findWordBankByName(name: String!): WordBank! @skipAuth
   }
 
   input CreateWordBankInput {
@@ -27,8 +28,7 @@ export const schema = gql`
 
   type Mutation {
     createWordBank(input: CreateWordBankInput!): WordBank! @requireAuth
-    updateWordBank(id: String!, input: UpdateWordBankInput!): WordBank!
-      @requireAuth
+    updateWordBank(id: String!, input: UpdateWordBankInput!): WordBank! @requireAuth
     deleteWordBank(id: String!): WordBank! @requireAuth
   }
 `

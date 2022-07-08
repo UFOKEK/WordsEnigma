@@ -12,12 +12,13 @@ interface IState {
 class Header extends Component<IProps, IState> {
   constructor(props) {
     super(props);
+
   }
 
   render() {
     return (
       <header>
-        <div className="title">Mot du jour!</div>
+        <div className="title">{this.props.title}</div>
       </header>
 
     );

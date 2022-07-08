@@ -15,6 +15,14 @@ export const wordBank: QueryResolvers['wordBank'] = ({ id }) => {
   })
 }
 
+export const findWordBankbyName: QueryResolvers['findWordBankByName'] = ({ name }) => {
+  return db.wordBank.findUnique({
+    where: { 
+      name: name
+     },
+  })
+}
+
 export const createWordBank: MutationResolvers['createWordBank'] = ({
   input,
 }) => {

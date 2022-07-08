@@ -55,7 +55,7 @@ model Word {
   example    String?
   synonym    String?
   size       Int
-  source     String[]
+  source     String?
   Language   Language  @relation(fields: [languageId], references: [id])
   languageId String
   Game       Game[]

@@ -2,42 +2,48 @@ import { PrismaClient } from '@prisma/client';
 import { Logger } from 'pino';
 import getDefinition from './dictionnaryCrawler';
 import { WordsFR } from '../data/fr';
-import { logger } from '$api/src/lib/logger';
 
 const languageCode = 'fr'
 
 export async function addWords(db: PrismaClient, logger: Logger) {
-    try {
-         const mapWordDefinition = await getDefinitionMapping();
-        await db.word.createMany({ data: mapWordDefinition });
-    } catch (err) {
-        logger.error(err)
-    }
-}
-
-async function getDefinitionMapping(){
-    let mapWordDefinition = [];
     for (const word of WordsFR) {
-        const definition = await getDefinition(languageCode, word);
-        if (definition) {
-            mapWordDefinition.push({
+        await db.word.upsert({
+            where: {
                 word: word,
-                definition: definition.definition,
-                source: definition.source,
+            },
+            update: {},
+            create: {
+                word: word,
+                definition: "",
+                source: "",
+                example: "",
+                synonym: "",
                 size: word.length,
                 Language: {
                     connect: {
-                        code: languageCode,
-                    },
+                        code: languageCode
+                    }
                 },
                 WordBank: {
                     connect: {
                         name: languageCode
                     }
                 }
-            })
-            logger.info(`${word} added`)
-        }
+            }
+        })
+        logger.debug(`Added word ${word}`)
+        // const defintion = await getDefinition(languageCode, word)
+        // if (defintion) {
+        //     db.word.update({
+        //         where: {
+        //             word: word,
+        //         },
+        //         data: {
+        //             definition: defintion.definition,
+        //             source: defintion.source,
+        //         }
+        //     })
+        //     logger.debug(`Updated word ${word}`)
+        // }
     }
-    return mapWordDefinition
 }

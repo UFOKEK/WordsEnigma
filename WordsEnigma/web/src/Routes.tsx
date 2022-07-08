@@ -17,12 +17,11 @@ import UserSettingsLayout from 'src/layouts/UserSettingsLayout'
 import UsersLayout from 'src/layouts/UsersLayout'
 import WordsLayout from 'src/layouts/WordsLayout'
 import GamesLayout from 'src/layouts/GamesLayout'
-import AdminLayout from './layouts/AdminLayout/AdminLayout'
+import AdminLayout from 'src/layouts/AdminLayout/AdminLayout'
 
 const Routes = () => {
   return (
     <Router>
-
       <Private unauthenticated="home" roles="admin">
         <Set wrap={AdminLayout}>
           <Route path="/admin" page={AdminPage} name="admin" />
@@ -87,10 +86,8 @@ const Routes = () => {
       <Route path="/signup" page={SignupPage} name="signup" />
       <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
       <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
-
       <Route path="/" page={HomePage} name="home" />
       <Route path="/motdujour" page={MotduJourPage} name="motdujour" />
-      <Route path="/phil" page={MotDuJourPhilPage} name="motDuJourPhil" />
       <Route notfound page={NotFoundPage} />
 
     </Router>

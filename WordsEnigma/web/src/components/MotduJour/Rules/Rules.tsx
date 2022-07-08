@@ -3,9 +3,13 @@ import './Rules.css';
 
 
 interface IProps {
+  grey: string;
+  green: string;
+  blue: string;
 }
 
 interface IState {
+
 }
 
 
@@ -17,11 +21,11 @@ class Rules extends Component<IProps, IState> {
     return (
       <div className="rules">
         <div className="grey"></div>
-        <div> Pas dans le mot </div>
+        <div> {this.props.grey} </div>
         <div className="green"></div>
-        <div> Mauvaise position </div>
+        <div> {this.props.green} </div>
         <div className="blue"></div>
-        <div> Parfait! </div>
+        <div> {this.props.blue} </div>
       </div>
     );
   }
