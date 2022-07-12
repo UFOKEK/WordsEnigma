@@ -1,12 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import { Logger } from 'pino';
-import getDefinition from './dictionnaryCrawler';
-import { WordsFR } from '../data/fr';
+import { WordsEN } from '../data/en';
 
-const languageCode = 'fr';
+const languageCode = 'en';
 
 export async function addWords(db: PrismaClient, logger: Logger) {
-    for (const word of WordsFR) {
+    for (const word of WordsEN) {
         await db.word.upsert({
             where: {
                 word: word,

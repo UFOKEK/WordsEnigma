@@ -14,7 +14,7 @@ const MotduJourPage = () => {
       <MetaTags title="Mot du Jour !" description="Mot du Jour !" />
       <Header title='Mot du Jour !' />
       <GameLogic rows={6} cols={5} language="fr" />
-      <Rules grey="Pas dans le mot" green="Mauvaise position" blue="Parfait!" />
+      <Rules notInWord="Pas dans le mot" badPosition="Mauvaise position" goodPosition="Parfait!" />
       <Keyboard language="fr" />
     </div>
   )

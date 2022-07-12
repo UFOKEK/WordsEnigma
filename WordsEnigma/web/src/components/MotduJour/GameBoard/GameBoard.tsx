@@ -24,6 +24,20 @@ class GameBoard extends Component<IProps, IState> {
     };
   }
 
+      /**
+    * 
+    * @param row The row number
+    * @param col The column number
+    * @returns gameGrid[row][col]
+    */
+    generateGameGrid = (row: number, col: number): string[][] => {
+        return new Array(row)
+            .fill("")
+            .map(() =>
+                new Array(col).fill("")
+            );
+    }
+
   componentDidMount() {
     eventBus.on('gameGrid', (gameGrid) => {
       this.setState({
@@ -35,7 +49,16 @@ class GameBoard extends Component<IProps, IState> {
         colorGrid: colorGrid,
       });
     });
+    eventBus.on('resetGame', () => {
+      this.setState({
+        gameGrid: this.generateGameGrid(this.props.rows, this.props.cols),
+        colorGrid: this.generateGameGrid(this.props.rows, this.props.cols),
+      });
+    }
+    );
   }
+
+
 
   renderGrid() {
     const { cols, rows } = this.props;
@@ -63,7 +86,7 @@ class GameBoard extends Component<IProps, IState> {
   }
 
   renderCell(row, col) {
-    return <div className={"cell " + this.state.colorGrid[row][col]}>{this.state.gameGrid[row][col]}</div>;
+    return <div className={"cell " + this.props.colorGrid[row][col]}>{this.props.gameGrid[row][col]}</div>;
   }
 
 

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import eventBus from '../EventBus/EventBus';
 import './EmojiGrid.css';
 
 
 interface IProps {
-    message: string;
     rowSize: number;
     colSize: number;
+    colorGrid: string[][];
 }
 
 interface IState {
@@ -18,10 +19,18 @@ class EmojiGrid extends Component<IProps, IState> {
     constructor(props) {
         super(props);
         this.state = {
-            rowSize: this.props.rowSize,
-            colSize: this.props.colSize,
-            colorGrid: Array(this.props.rowSize).fill(Array(this.props.colSize).fill('')),
+            rowSize: props.rowSize,
+            colSize: props.colSize,
+            colorGrid: props.colorGrid,
         }
+    }
+
+    componentDidMount() {
+        eventBus.on('colorGrid', (colorGrid) => {
+            this.setState({
+                colorGrid: colorGrid,
+            });
+        });
     }
 
     generateEmojiGrid = () => {
@@ -38,17 +47,29 @@ class EmojiGrid extends Component<IProps, IState> {
                     traduction.push("🟩")
                 }
             }
-            if (this.state.colorGrid[i + 1] != null && this.state.colorGrid[i + 1][0] !== '') { traduction.push("\n") }
+            if (this.state.colorGrid[i + 1] != null && this.state.colorGrid[i + 1][0] !== '') { 
+                traduction.push("\n") 
+            }
 
         }
-        return traduction.join('')
+        return traduction
     }
 
     render() {
         return (
             <div className="emojiGrid">
-                {this.generateEmojiGrid()}
+                {
+                this.generateEmojiGrid().map((emoji, index) => {
+                    if (emoji === '\n') {
+                        return <br key={index} />
+                    } else {
+                        return <span key={index}>{emoji}</span>
+                    }
+                })
+            }
             </div>
         );
     }
 }
+
+export default EmojiGrid;

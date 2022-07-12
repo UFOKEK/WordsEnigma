@@ -20,7 +20,7 @@ export const schema = gql`
     words: [Word!]! @requireAuth
     word(id: String!): Word! @skipAuth
     findWord(word: String!): Word! @skipAuth
-    findWordByWordBankId(id: String!): [Word!]! @skipAuth
+    findWordByWordBankName(name: String!): [Word!]! @skipAuth
   }
 
   input CreateWordInput {

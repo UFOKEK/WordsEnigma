@@ -23,10 +23,12 @@ export const findWord: QueryResolvers['findWord'] = ({ word }) => {
   })
 }
 
-export const findWordByWordBankId: QueryResolvers['findWordByWordBankId'] = ({ id }) => {
+export const findWordByWordBankName: QueryResolvers['findWordByWordBankName'] = ({ name }) => {
   return db.word.findMany({
     where: { 
-      wordBankId :id 
+      WordBank: {
+        name: name
+      }
     },
   })
 

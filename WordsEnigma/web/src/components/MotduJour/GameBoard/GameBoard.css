@@ -22,6 +22,10 @@
 }
 
 .incorrect {
+  background-color: rgb(217, 56, 61) !important;
+}
+
+.close {
   background-color: rgb(73, 71, 91) !important;
 }
 

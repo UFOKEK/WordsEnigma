@@ -1,7 +1,10 @@
-import { useState,  useEffect, useReducer, useRef } from "react";
+
+import { useLazyQuery } from "@apollo/client";
+import { useState, useEffect, useRef } from "react";
 
 import eventBus from "../EventBus/EventBus";
 import GameBoard from '../GameBoard/GameBoard';
+import EmojiGrid from "../EmojiGrid/EmojiGrid";
 import Modal from '../Modal/Modal';
 
 interface IProps {
@@ -28,14 +31,13 @@ interface IState {
 }
 
 const QUERY = gql`
-query FindFindWordByWordBankIdQuery($id: String!) {
-    findWordByWordBankId: findWordByWordBankId(id: $id) {
-        id
+query FindWordByWordBankNameQuery($name: String!) {
+    findWordByWordBankName: findWordByWordBankName(name: $name) {
         word
-        definition
     }
 }
 `;
+
 
 function GameLogic(props: IProps) {
 
@@ -67,16 +69,27 @@ function GameLogic(props: IProps) {
     const [correctLetters, setCorrectLetters] = useState([]);
     const [closeLetters, setCloseLetters] = useState([]);
     const [incorrectLetters, setIncorrectLetters] = useState([]);
-    const dict = useRef([]);
+    const dict = useRef(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMsg, setModalMsg] = useState("");
     const currentAttempt = useRef("");
+    const timer = useRef(null);
+
+    const [getQuery, {loading, error, data: myDict}] = useLazyQuery(QUERY,{ 
+        variables: {name: 'fr'}
+    });
 
     useEffect(() => {
+        if (myDict) {
+            dict.current = myDict.findWordByWordBankName.map(word => word.word);
+            solution.current = dict.current[Math.floor(Math.random() * dict.current.length)];
+        }
+      }, [myDict])
+
+    useEffect(() => {
+        getQuery();
         // Anything in here is fired on component mount.
         eventBus.on('keyPress', handleKeyPress);
-        dict.current = getDict()
-        solution.current = getSolution();
         return () => {
             // Anything in here is fired on component unmount.
             eventBus.remove('keyPress', handleKeyPress);
@@ -86,6 +99,7 @@ function GameLogic(props: IProps) {
     const handleKeyPress = (key) => {
         key = key.message;
         if (isOver.current) {
+            setIsModalOpen(true);
             return;
         }
         if (key.length === 1) {
@@ -99,13 +113,6 @@ function GameLogic(props: IProps) {
         }
     }
 
-    const getDict = (): string[] => {
-        return ["pomme", "ponne"]
-    }
-    const getSolution = (): string => {
-        return "pomme";
-    }
-
     /**
      * Write a letter in the game grid
      * @param letter The letter to add to the current attempt
@@ -114,6 +121,10 @@ function GameLogic(props: IProps) {
     const writeLetter = (letter: string): void => {
         if (checkGameOver()) {
             return;
+        }
+
+        if(activeAttempt.current === 0 && activeLetter.current === 1) {
+            timer.current = performance.now();
         }
 
         //s'il y a deja 5 lettres dans le current attempt, on ajoute rien
@@ -147,11 +158,11 @@ function GameLogic(props: IProps) {
      */
     const playLine = () => {
         if (checkGameOver()) {
-            return false
+            return;
         }
 
         if (!checkActiveMove()) {
-            return false;
+            return;
         }
 
         let currentAttempt = retriveCurrentAttempt();
@@ -159,13 +170,13 @@ function GameLogic(props: IProps) {
         //Making sure the attempt is a real word
         if (!testAttempt(currentAttempt)) {
             console.log("Word not found in dictionnary")
-            return
+            return;
         }
 
         generateColorGrid(currentAttempt);
 
         //Check if the attempt is correct
-        checkGameStatus()
+        checkGameStatus();
     }
 
     const generateColorGrid = (currentAttempt: string) => {
@@ -228,13 +239,17 @@ function GameLogic(props: IProps) {
     const checkGameStatus = (): void => {
         //Check if the game is over
         if (retriveCurrentAttempt() === solution.current) {
-            console.log("You won!")
+            timer.current = performance.now() - timer.current
+            console.log(`You won! ${timer.current/1000} seconds`)
             updateGameStatus(true, true)
+            openModal("You won!")
             return;
         } else if (activeAttempt.current === 5) {
-            console.log("You lost!")
+            timer.current = performance.now() - timer.current
+            console.log(`You lost! ${timer.current/1000} seconds`)
             updateGameStatus(false, true)
-            return;
+            openModal("You lost!")
+                        return;
         } else {
             activeAttempt.current++
             activeLetter.current = 0
@@ -243,12 +258,24 @@ function GameLogic(props: IProps) {
 
     const resetGame = () => {
         updateActiveMove(0, 0);
-        setGameGrid(generateGameGrid(rows, cols));
         setCorrectLetters([]);
         setCloseLetters([]);
         setIncorrectLetters([]);
         setColorGrid(generateGameGrid(rows, cols));
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                updateColorGrid(i, j, "")
+                updateGameGrid(i, j, "");
+            }
+        }
         updateGameStatus(false, false)
+        setModalMsg("")
+        setIsModalOpen(false)
+        eventBus.dispatch('resetGame', true);
+        currentAttempt.current = "";
+        timer.current = 0;
+        solution.current = dict.current[Math.floor(Math.random() * dict.current.length)];
+
     }
 
     /**
@@ -309,11 +336,6 @@ function GameLogic(props: IProps) {
         activeLetter.current = letter;
     }
 
-    /**
-     * 
-     * 
-     *  
-    */
     const updateGameStatus = (won: boolean, over: boolean): void => {
         isWon.current = won;
         isOver.current = over;
@@ -369,11 +391,12 @@ function GameLogic(props: IProps) {
             <Modal
                 isOpen={isModalOpen}
                 onClose={() => {
+                    setIsModalOpen(false)
                 }}
                 message={modalMsg}
-                onSubmit={() => { resetGame(); }}
+                onSubmit={() => { resetGame(); setIsModalOpen(false) }}
                 title={isWon ? "You won!" : "You lost!"}
-                componant={null} >
+                emojiGrid={<EmojiGrid rowSize={rows} colSize={cols} colorGrid={colorGrid} />}>
             </Modal>
         </>
     );

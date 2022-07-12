@@ -8,7 +8,7 @@ interface IProps {
     onSubmit: () => void;
     title: string | "Mot du Jour !";
     message: string | "";
-    componant: React.ReactNode | null;
+    emojiGrid: React.ReactNode | null;
 }
 
 
@@ -42,16 +42,18 @@ class Modal extends Component<IProps, IState> {
                 <div className='modal' onClick={(e) => e.stopPropagation()}>
                     <div className='modalContent'>
                         <div className='modalHeader'>
-                            <div className='modalTitle'>{this.props.title}</div>
                             <div className='modalClose' onClick={this.onClose}>&times;</div>
+                            <div className='modalTitle'>{this.props.title}</div>
                         </div>
                         <div className='modalBody'>
                             <div className='modalMessage'>
                                 {this.state.message}
                             </div>
-                            {this.props.componant}
+                            <div className='modalComponant'>
+                                {this.props.emojiGrid}
+                            </div>
                             <div className='modalFooter'>
-                                <div className='modalSubmit' onClick={this.onSubmit}>Ok</div>
+                                <div className='modalSubmit' onClick={this.onSubmit}>Reset</div>
                             </div>
                         </div>
                     </div>
