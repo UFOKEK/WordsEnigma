@@ -11,6 +11,12 @@ services:
       MYSQL_USER: mariadb
       MYSQL_PASSWORD: mariadb
     restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
   web:
     build:
       context: .
