@@ -1,7 +1,7 @@
 # WordsEnigma
 Wordle in multi languague
 
-## Install Program
+## Run in dev mode
 ```bash 
     cd WordsEnigma
     yarn install
@@ -20,4 +20,9 @@ Wordle in multi languague
 ## Create Postgres Database Docker
 ```bash
     docker run --name=db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -p '5432:5432' -d postgres
+```
+
+## Deployement Production
+```bash
+    yarn rw deploy baremetal production --first-run
 ```
