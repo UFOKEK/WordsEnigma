@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@redwoodjs/api": "1.5.2",
-    "@redwoodjs/graphql-server": "1.5.2"
+    "@redwoodjs/api": "^2.1.0",
+    "@redwoodjs/graphql-server": "^2.1.0"
+  },
+  "devDependencies": {
+    "yarn-upgrade-all": "^0.7.1"
   }
 }
