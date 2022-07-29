@@ -1,21 +1,16 @@
 version: "3.9"
 services:
-  db:
-    image: postgres:14.1-alpine
+  mariadb:
+    image: mariadb:10.7
+    container_name: mariadb
     ports:
-      - '5432:5432'
-    volumes:
-      - ~/apps/mongo:/var/lib/postgresql/data
+      - 3306:3306
     environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: WordEnigma
+      MYSQL_USER: mariadb
+      MYSQL_PASSWORD: mariadb
     restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 1m30s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
   web:
     build:
       context: .
@@ -25,12 +20,10 @@ services:
     volumes:
       - ~/apps/web:/app
     environment:
-      - DATABASE_URL=postgresql://other@localhost/otherdb?connect_timeout=10&application_name=myapp
+      - DATABASE_URL=mysql://root:root@localhost:3306/WordEnigma
       - PRISMA_HIDE_UPDATE_MESSAGE=true
       - SESSION_SECRET=pd8RNxZJ9foEvWTAjJo5V34YrHQidsTb3HDZ62zbiJpQ8J6vV2rVWyCnYgBY3ouj
     depends_on:
-      db:
-        condition: service_started
       api:
         condition: service_healthy
     restart: always
@@ -47,9 +40,7 @@ services:
     ports:
       - "8911:8911"
     depends_on:
-      db:
-        condition: service_healthy
-      web:
+      mariadb:
         condition: service_healthy
     volumes:
       - ~/apps/api:/app

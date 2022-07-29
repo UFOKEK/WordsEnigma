@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Logger } from 'pino';
 
-const languageCode = 'en'
+const languageCode = 'es'
 
 export async function addWordBank(db: PrismaClient, logger: Logger) {
     await db.wordBank.upsert(
