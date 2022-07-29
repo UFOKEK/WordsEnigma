@@ -61,6 +61,7 @@ import EditWordBankPage from './pages/Admins/WordBank/EditWordBankPage/EditWordB
 import NewWordBankPage from './pages/Admins/WordBank/NewWordBankPage/NewWordBankPage'
 import WordBankPage from './pages/Admins/WordBank/WordBankPage/WordBankPage'
 import WordBanksPage from './pages/Admins/WordBank/WordBanksPage/WordBanksPage'
+import PalabraDelDiaPage from './pages/Wordle/PalabraDelDiaPage/PalabraDelDiaPage'
 
 const Routes = () => {
   return (
@@ -130,8 +131,9 @@ const Routes = () => {
       <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
       <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
       <Route path="/" page={HomePage} name="home" />
-      <Route path="/motdujour" page={MotduJourPage} name="motdujour" />
-      <Route path="/wordoftheday" page={WordOfTheDayPage} name="wordoftheday" />
+      <Route path="/motdujour" page={MotduJourPage} name="motDuJour" />
+      <Route path="/wordoftheday" page={WordOfTheDayPage} name="wordOfTheDay" />
+      <Route path="/palabradeldia" page={PalabraDelDiaPage} name="palabraDelDia" />
       <Route notfound page={NotFoundPage} />
 
     </Router>

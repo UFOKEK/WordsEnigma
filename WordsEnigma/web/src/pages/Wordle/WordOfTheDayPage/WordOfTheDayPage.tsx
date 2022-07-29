@@ -15,7 +15,7 @@ const WordOfTheDayPage = () => {
       <Header title='Word of the Day !' />
       <GameLogic rows={6} cols={5} language="en" />
       <Rules notInWord="Not in the word" badPosition="Bad Position" goodPosition="Perfect!" />
-      <Keyboard language="fr" />
+      <Keyboard language="en" />
     </div>
   )
 }

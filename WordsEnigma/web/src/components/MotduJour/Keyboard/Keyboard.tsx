@@ -52,7 +52,7 @@ letter
   }
 
   generateKeyboard() {
-    if (this.props.language === 'fr' || this.props.language === 'en') {
+    if (this.props.language === 'fr' || this.props.language === 'en' || this.props.language === 'es') {
       this.setState({
         lineSize: 3,
         lineArray: [
