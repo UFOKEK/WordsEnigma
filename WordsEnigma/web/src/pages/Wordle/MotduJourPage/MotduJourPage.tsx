@@ -3,10 +3,10 @@ import { MetaTags } from '@redwoodjs/web';
 
 import './MotduJourPage.css';
 
-import GameLogic from '../../../components/MotduJour/GameLogic/GameLogic';
-import Rules from '../../../components/MotduJour/Rules/Rules';
-import Keyboard from '../../../components/MotduJour/Keyboard/Keyboard';
-import Header from '../../../components/MotduJour/Header/Header';
+import GameLogic from '../../../components/GameComponents/GameLogic/GameLogic';
+import Rules from '../../../components/GameComponents/Rules/Rules';
+import Keyboard from '../../../components/GameComponents/Keyboard/Keyboard';
+import Header from '../../../components/GameComponents/Header/Header';
 
 const MotduJourPage = () => {
   return (

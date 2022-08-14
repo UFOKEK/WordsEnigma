@@ -1,9 +1,9 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import GameLogic from 'src/components/MotduJour/GameLogic/GameLogic';
-import Header from 'src/components/MotduJour/Header/Header';
-import Keyboard from 'src/components/MotduJour/Keyboard/Keyboard';
-import Rules from 'src/components/MotduJour/Rules/Rules';
+import GameLogic from 'src/components/GameComponents/GameLogic/GameLogic';
+import Header from 'src/components/GameComponents/Header/Header';
+import Keyboard from 'src/components/GameComponents/Keyboard/Keyboard';
+import Rules from 'src/components/GameComponents/Rules/Rules';
 
 import './PalabraDelDiaPage.css';
 

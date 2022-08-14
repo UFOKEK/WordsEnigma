@@ -1,5 +1,11 @@
 FROM node:16-alpine as builder
 
+# # Node
+# ARG NODE_ENV
+# ARG RUNTIME_ENV
+# ENV NODE_ENV=$NODE_ENV
+# ENV RUNTIME_ENV=$RUNTIME_ENV
+
 WORKDIR /app
 
 COPY web web

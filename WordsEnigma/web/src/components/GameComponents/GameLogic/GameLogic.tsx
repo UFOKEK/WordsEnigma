@@ -76,13 +76,14 @@ function GameLogic(props: IProps) {
     const timer = useRef(null);
 
     const [getQuery, {loading, error, data: myDict}] = useLazyQuery(QUERY,{ 
-        variables: {name: 'fr'}
+        variables: {name: language}
     });
 
     useEffect(() => {
         if (myDict) {
             dict.current = myDict.findWordByWordBankName.map(word => word.word);
-            solution.current = dict.current[Math.floor(Math.random() * dict.current.length)];
+            let day = new Date().getDay()
+            solution.current = dict.current[Math.floor((Math.random() * day) * dict.current.length)];
         }
       }, [myDict])
 

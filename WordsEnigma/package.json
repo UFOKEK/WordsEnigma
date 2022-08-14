@@ -9,7 +9,8 @@
   },
   "devDependencies": {
     "@getbigger-io/prisma-fixtures-cli": "^1.0.10",
-    "@redwoodjs/core": "1.5.2"
+    "@redwoodjs/core": "1.5.2",
+    "node-ssh": "^13.0.0"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",

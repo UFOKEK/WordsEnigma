@@ -53,7 +53,7 @@ class Modal extends Component<IProps, IState> {
                                 {this.props.emojiGrid}
                             </div>
                             <div className='modalFooter'>
-                                <div className='modalSubmit' onClick={this.onSubmit}>Reset</div>
+                                <div className='modalSubmit' onClick={this.onSubmit}>New</div>
                             </div>
                         </div>
                     </div>
