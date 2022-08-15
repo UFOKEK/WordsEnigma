@@ -1,34 +1,37 @@
 version: '3.8'
 services:
-    uptime-kuma:
-        image: 'louislam/uptime-kuma:1'
-        container_name: uptime
-        restart: always
-        ports:
-            - '3001:3001'
-        volumes:
-            - './data:/app/data'
-    umami:
-        image: ghcr.io/mikecao/umami:postgresql-latest
-        ports:
-          - "3000:3000"
-        environment:
-          DATABASE_URL: postgresql://umami:umami@db:5432/umami
-          DATABASE_TYPE: postgresql
-          HASH_SALT: umani
-        depends_on:
-          - db
-        restart: always
-    umami-db:
-      image: postgres:12-alpine
-      environment:
-        POSTGRES_DB: umami
-        POSTGRES_USER: umami
-        POSTGRES_PASSWORD: umami
-      volumes:
-        - ./sql/schema.postgresql.sql:/docker-entrypoint-initdb.d/schema.postgresql.sql:ro
-        - umami-db-data:/var/lib/postgresql/data
-      restart: always
+  statuspage:
+    image: 'louislam/uptime-kuma:1'
+    container_name: uptime
+    restart: always
+    ports:
+      - '3001:3001'
+    volumes:
+      - uptime-kuma:/app/data
+  analystics:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    ports:
+    - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://umami:umami@analystics-db:5432/umami
+      DATABASE_TYPE: postgresql
+      HASH_SALT: random-string
+    depends_on:
+      - analystics-db
+    restart: always
+  analystics-db:
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: umami
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./sql/schema.postgresql.sql:/docker-entrypoint-initdb.d/schema.postgresql.sql:ro
+      - umami-db-data:/var/lib/postgresql/data
+    restart: always
 
 volumes:
   umami-db-data:
+  uptime-kuma:
