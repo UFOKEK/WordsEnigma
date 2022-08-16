@@ -10,6 +10,8 @@ services:
       MYSQL_DATABASE: WordEnigma
       MYSQL_USER: mariadb
       MYSQL_PASSWORD: mariadb
+    volumes:
+      - ./data/mariadb:/var/lib/mysql
     restart: always
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
