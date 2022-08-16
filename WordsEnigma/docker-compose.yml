@@ -26,7 +26,7 @@ services:
     volumes:
       - ~/apps/web:/app
     environment:
-      - DATABASE_URL=mysql://root:root@localhost:3306/WordEnigma
+      - DATABASE_URL=mysql://mariadb:mariadb@localhost:3306/WordEnigma
       - PRISMA_HIDE_UPDATE_MESSAGE=true
       - SESSION_SECRET=pd8RNxZJ9foEvWTAjJo5V34YrHQidsTb3HDZ62zbiJpQ8J6vV2rVWyCnYgBY3ouj
     depends_on:
